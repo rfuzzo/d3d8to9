@@ -4,6 +4,7 @@
  */
 
 #include "d3dx9.hpp"
+#include "d3dx9.h"
 #include "d3d8to9.hpp"
 #include <regex>
 #include <assert.h>

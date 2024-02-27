@@ -6,7 +6,7 @@
 
 #include <d3d9.h>
 
-#define D3DX_FILTER_NONE 1
+//#define D3DX_FILTER_NONE 1
 
 #define D3DXASM_DEBUG 0x0001
 #define D3DXASM_SKIPVALIDATION  0x0010
@@ -17,6 +17,7 @@
 #define D3DXASM_FLAGS D3DXASM_DEBUG
 #endif // NDEBUG
 
+#ifndef D3DX9
 struct D3DXMACRO
 {
 	LPCSTR Name;
@@ -45,3 +46,4 @@ typedef HRESULT(WINAPI *PFN_D3DXLoadSurfaceFromSurface)(LPDIRECT3DSURFACE9 pDest
 extern PFN_D3DXAssembleShader D3DXAssembleShader;
 extern PFN_D3DXDisassembleShader D3DXDisassembleShader;
 extern PFN_D3DXLoadSurfaceFromSurface D3DXLoadSurfaceFromSurface;
+#endif // D3DX9

@@ -39,6 +39,8 @@ public:
 	virtual HMONITOR STDMETHODCALLTYPE GetAdapterMonitor(UINT Adapter) override;
 	virtual HRESULT STDMETHODCALLTYPE CreateDevice(UINT Adapter, D3DDEVTYPE DeviceType, HWND hFocusWindow, DWORD BehaviorFlags, D3DPRESENT_PARAMETERS8 *pPresentationParameters, IDirect3DDevice8 **ppReturnedDeviceInterface) override;
 
+	IDirect3DDevice8* factoryProxyDevice(IDirect3DDevice9* d, bool EnableZBufferDiscarding);
+
 private:
 	IDirect3D9 *const ProxyInterface;
 	static const UINT MaxAdapters = 8;
@@ -159,7 +161,7 @@ public:
 
 	AddressLookupTable *ProxyAddressLookupTable;
 
-private:
+public:
 	void ApplyClipPlanes();
 	void ReleaseShaders();
 
@@ -447,3 +449,6 @@ private:
 #ifndef D3D8TO9NOLOG
 extern std::ofstream LOG;
 #endif
+
+static const GUID guid_proxydx =
+{ 0x7c204fb1, 0x9cac, 0x4b8d, { 0xba, 0xed, 0x7b, 0xf4, 0x8b, 0xf6, 0x3b, 0xb2 } };

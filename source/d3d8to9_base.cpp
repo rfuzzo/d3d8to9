@@ -4,6 +4,7 @@
  */
 
 #include "d3d8to9.hpp"
+#include <mge/configuration.h>
 
 static const D3DFORMAT AdapterFormats[] = {
 	D3DFMT_A8R8G8B8,
@@ -168,43 +169,158 @@ HMONITOR STDMETHODCALLTYPE Direct3D8::GetAdapterMonitor(UINT Adapter)
 }
 HRESULT STDMETHODCALLTYPE Direct3D8::CreateDevice(UINT Adapter, D3DDEVTYPE DeviceType, HWND hFocusWindow, DWORD BehaviorFlags, D3DPRESENT_PARAMETERS8 *pPresentationParameters, IDirect3DDevice8 **ppReturnedDeviceInterface)
 {
-#ifndef D3D8TO9NOLOG
-	LOG << "Redirecting '" << "IDirect3D8::CreateDevice" << "(" << this << ", " << Adapter << ", " << DeviceType << ", " << hFocusWindow << ", " << BehaviorFlags << ", " << pPresentationParameters << ", " << ppReturnedDeviceInterface << ")' ..." << std::endl;
-#endif
-
 	if (pPresentationParameters == nullptr || ppReturnedDeviceInterface == nullptr)
 		return D3DERR_INVALIDCALL;
 
 	*ppReturnedDeviceInterface = nullptr;
 
-	D3DPRESENT_PARAMETERS PresentParams;
-	ConvertPresentParameters(*pPresentationParameters, PresentParams);
+	// Window positioning
+	if (pPresentationParameters->Windowed) {
+		HWND hMainWnd = GetParent(hFocusWindow);
+		int wx = std::max(0, (GetSystemMetrics(SM_CXSCREEN) - (int)pPresentationParameters->BackBufferWidth) / 2);
+		int wy = std::max(0, (GetSystemMetrics(SM_CYSCREEN) - (int)pPresentationParameters->BackBufferHeight) / 2);
 
-	// Get multisample quality level
-	if (PresentParams.MultiSampleType != D3DMULTISAMPLE_NONE)
-	{
-		DWORD QualityLevels = 0;
-		if (ProxyInterface->CheckDeviceMultiSampleType(Adapter,
-			DeviceType, PresentParams.BackBufferFormat, PresentParams.Windowed,
-			PresentParams.MultiSampleType, &QualityLevels) == S_OK &&
-			ProxyInterface->CheckDeviceMultiSampleType(Adapter,
-				DeviceType, PresentParams.AutoDepthStencilFormat, PresentParams.Windowed,
-				PresentParams.MultiSampleType, &QualityLevels) == S_OK)
-		{
-			PresentParams.MultiSampleQuality = (QualityLevels != 0) ? QualityLevels - 1 : 0;
+		if (Configuration.Borderless) {
+			// Remove non-client window parts and move window flush to screen edge / centre if smaller than display
+			SetWindowLong(hMainWnd, GWL_STYLE, WS_VISIBLE);
+			SetWindowPos(hMainWnd, NULL, wx, wy, pPresentationParameters->BackBufferWidth, pPresentationParameters->BackBufferHeight, SWP_NOACTIVATE | SWP_NOCOPYBITS | SWP_NOZORDER);
+		}
+		else {
+			// Move window to top, with client area centred on one axis
+			RECT rect = { wx, wy, int(pPresentationParameters->BackBufferWidth), int(pPresentationParameters->BackBufferHeight) };
+			AdjustWindowRect(&rect, GetWindowLong(hMainWnd, GWL_STYLE), FALSE);
+			SetWindowPos(hMainWnd, NULL, rect.left, 0, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE | SWP_NOCOPYBITS | SWP_NOZORDER);
+		}
+
+		// Ensure that the render window appears on the taskbar, as it is a child window that may become hidden
+		LONG style = GetWindowLong(hMainWnd, GWL_EXSTYLE);
+		SetWindowLong(hMainWnd, GWL_EXSTYLE, style | WS_EX_APPWINDOW);
+
+		// Windowed mode does not allow multiple frame vsync
+		if (Configuration.VWait >= D3DPRESENT_INTERVAL_TWO && Configuration.VWait <= D3DPRESENT_INTERVAL_FOUR) {
+			Configuration.VWait = D3DPRESENT_INTERVAL_ONE;
+			//LOG::logline("VWait greater than one is not supported in windowed mode.");
 		}
 	}
 
-	IDirect3DDevice9 *DeviceInterface = nullptr;
+	// Convert presentation parameters to DX9
+	D3DPRESENT_PARAMETERS pp;
 
-	const HRESULT hr = ProxyInterface->CreateDevice(Adapter, DeviceType, hFocusWindow, BehaviorFlags, &PresentParams, &DeviceInterface);
+#ifdef MGE_XE
+	// MSAA parameters
+	D3DMULTISAMPLE_TYPE msaaSamples = (D3DMULTISAMPLE_TYPE)Configuration.AALevel;
+	DWORD msaaQuality = 0;
+
+	// Override device parameters
+	// Note that Morrowind will look at the modified parameters
+	if (pPresentationParameters->Flags & D3DPRESENTFLAG_LOCKABLE_BACKBUFFER) {
+		pPresentationParameters->Flags ^= D3DPRESENTFLAG_LOCKABLE_BACKBUFFER;
+	}
+
+	pPresentationParameters->MultiSampleType = msaaSamples;
+	pPresentationParameters->AutoDepthStencilFormat = (D3DFORMAT)Configuration.ZBufFormat;
+	pPresentationParameters->FullScreen_RefreshRateInHz = (!pPresentationParameters->Windowed) ? Configuration.RefreshRate : 0;
+	pPresentationParameters->FullScreen_PresentationInterval = (Configuration.VWait == 255) ? D3DPRESENT_INTERVAL_IMMEDIATE : Configuration.VWait;
+
+	pp.BackBufferWidth = pPresentationParameters->BackBufferWidth;
+	pp.BackBufferHeight = pPresentationParameters->BackBufferHeight;
+	pp.BackBufferFormat = pPresentationParameters->BackBufferFormat;
+	pp.BackBufferCount = pPresentationParameters->BackBufferCount;
+	pp.MultiSampleType = pPresentationParameters->MultiSampleType;
+	pp.MultiSampleQuality = msaaQuality;
+	pp.SwapEffect = pPresentationParameters->SwapEffect;
+	pp.hDeviceWindow = pPresentationParameters->hDeviceWindow;
+	pp.Windowed = pPresentationParameters->Windowed;
+	pp.Flags = pPresentationParameters->Flags;
+	pp.EnableAutoDepthStencil = pPresentationParameters->EnableAutoDepthStencil;
+	pp.AutoDepthStencilFormat = pPresentationParameters->AutoDepthStencilFormat;
+	pp.FullScreen_RefreshRateInHz = pPresentationParameters->FullScreen_RefreshRateInHz;
+	pp.PresentationInterval = pPresentationParameters->FullScreen_PresentationInterval;
+
+#else
+
+#ifndef D3D8TO9NOLOG
+	LOG << "Redirecting '" << "IDirect3D8::CreateDevice" << "(" << this << ", " << Adapter << ", " << DeviceType << ", " << hFocusWindow << ", " << BehaviorFlags << ", " << pPresentationParameters << ", " << ppReturnedDeviceInterface << ")' ..." << std::endl;
+#endif
+
+	ConvertPresentParameters(*pPresentationParameters, pp);
+
+	// Get multisample quality level
+	if (pp.MultiSampleType != D3DMULTISAMPLE_NONE)
+	{
+		DWORD QualityLevels = 0;
+		if (ProxyInterface->CheckDeviceMultiSampleType(Adapter,
+			DeviceType, pp.BackBufferFormat, pp.Windowed,
+			pp.MultiSampleType, &QualityLevels) == S_OK &&
+			ProxyInterface->CheckDeviceMultiSampleType(Adapter,
+				DeviceType, pp.AutoDepthStencilFormat, pp.Windowed,
+				pp.MultiSampleType, &QualityLevels) == S_OK)
+		{
+			pp.MultiSampleQuality = (QualityLevels != 0) ? QualityLevels - 1 : 0;
+		}
+	}
+#endif // MGE_XE
+	// Create device in the same manner as the proxy
+	IDirect3DDevice9* DeviceInterface = nullptr;
+	const HRESULT hr = ProxyInterface->CreateDevice(Adapter, DeviceType, hFocusWindow, BehaviorFlags, &pp, &DeviceInterface);
 	if (FAILED(hr))
 		return hr;
 
-	*ppReturnedDeviceInterface = new Direct3DDevice8(this, DeviceInterface, (PresentParams.Flags & D3DPRESENTFLAG_DISCARD_DEPTHSTENCIL) != 0);
+	*ppReturnedDeviceInterface = factoryProxyDevice(DeviceInterface, (pp.Flags & D3DPRESENTFLAG_DISCARD_DEPTHSTENCIL) != 0);
+
+///////////////////////////////////////
+
+	// Set up default render states
+	Configuration.ScaleFilter = (Configuration.AnisoLevel > 0) ? D3DTEXF_ANISOTROPIC : D3DTEXF_LINEAR;
+
+	for (int i = 0; i != 8; ++i) {
+		DeviceInterface->SetSamplerState(i, D3DSAMP_MINFILTER, Configuration.ScaleFilter);
+		DeviceInterface->SetSamplerState(i, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
+		DeviceInterface->SetSamplerState(i, D3DSAMP_MAXANISOTROPY, Configuration.AnisoLevel);
+	}
+#ifdef MGE_RTX
+	// Set variables dependent on configuration
+	DWORD FogPixelMode, FogVertexMode, RangedFog;
+	if (Configuration.FogMode == 2) {
+		FogVertexMode = D3DFOG_LINEAR;
+		FogPixelMode = D3DFOG_NONE;
+		RangedFog = 1;
+	}
+	else if (Configuration.FogMode == 1) {
+		FogVertexMode = D3DFOG_LINEAR;
+		FogPixelMode = D3DFOG_NONE;
+		RangedFog = 0;
+	}
+	else {
+		FogVertexMode = D3DFOG_NONE;
+		FogPixelMode = D3DFOG_LINEAR;
+		RangedFog = 0;
+	}
+
+	DeviceInterface->SetRenderState(D3DRS_FOGVERTEXMODE, FogVertexMode);
+	DeviceInterface->SetRenderState(D3DRS_FOGTABLEMODE, FogPixelMode);
+	DeviceInterface->SetRenderState(D3DRS_RANGEFOGENABLE, RangedFog);
+#endif // MGE_FOG
+	DeviceInterface->SetRenderState(D3DRS_MULTISAMPLEANTIALIAS, (Configuration.AALevel > 0));
+
+///////////////////////////////////////
 
 	// Set default vertex declaration
 	DeviceInterface->SetFVF(D3DFVF_XYZ);
 
 	return D3D_OK;
+
+}
+
+#ifdef MGE_XE
+#include "mge/mged3d8device.h"
+#endif // MGE_XE
+
+
+IDirect3DDevice8* Direct3D8::factoryProxyDevice(IDirect3DDevice9* d, bool EnableZBufferDiscarding) {
+#ifdef MGE_XE
+	return new MGEProxyDevice(d, this, EnableZBufferDiscarding);
+#else
+	return new Direct3DDevice8(this, d, EnableZBufferDiscarding);
+#endif // MGE_XE
 }

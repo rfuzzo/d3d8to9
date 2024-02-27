@@ -1,2 +1,3 @@
 EXPORTS
 	Direct3DCreate8
+	DirectInput8Create=FakeDirectInputCreate

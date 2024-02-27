@@ -7,9 +7,150 @@
     <Filter Include="resources">
       <UniqueIdentifier>{2d5bd44f-68df-4a2e-967b-57e194c0eac4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="mge">
+      <UniqueIdentifier>{b6db5363-41b2-4350-92bd-b1e2eb63a186}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mwse">
+      <UniqueIdentifier>{4d7c8fe9-aa3b-4f56-98f7-15b1556d88ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="proxydx">
+      <UniqueIdentifier>{58d720db-d8b5-4e48-a155-e83ec6d1dbd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="support">
+      <UniqueIdentifier>{501e17eb-3e1f-464c-8cf9-8f2c811673df}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\d3d8to9.cpp" />
+    <ClCompile Include="MGE-XE\src\mge\api.cpp">
+      <Filter>mge</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\mge\configuration.cpp">
+      <Filter>mge</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\mge\distantinit.cpp">
+      <Filter>mge</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\mge\distantland.cpp">
+      <Filter>mge</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\mge\dlmath.cpp">
+      <Filter>mge</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\mge\ffeshader.cpp">
+      <Filter>mge</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\mge\macrofunctions.cpp">
+      <Filter>mge</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\mge\memorypool.cpp">
+      <Filter>mge</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\mge\mged3d8device.cpp">
+      <Filter>mge</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\mge\mgedinput.cpp">
+      <Filter>mge</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\mge\morrowindbsa.cpp">
+      <Filter>mge</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\mge\mwbridge.cpp">
+      <Filter>mge</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\mge\mwinitpatch.cpp">
+      <Filter>mge</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\mge\postshaders.cpp">
+      <Filter>mge</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\mge\quadtree.cpp">
+      <Filter>mge</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\mge\renderdepth.cpp">
+      <Filter>mge</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\mge\renderexterior.cpp">
+      <Filter>mge</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\mge\rendergrass.cpp">
+      <Filter>mge</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\mge\rendershadow.cpp">
+      <Filter>mge</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\mge\renderwater.cpp">
+      <Filter>mge</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\mge\specificrender.cpp">
+      <Filter>mge</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\mge\statusoverlay.cpp">
+      <Filter>mge</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\mge\userhud.cpp">
+      <Filter>mge</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\mge\videobackground.cpp">
+      <Filter>mge</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\mwse\funccamera.cpp">
+      <Filter>mwse</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\mwse\funcentity.cpp">
+      <Filter>mwse</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\mwse\funcgeneral.cpp">
+      <Filter>mwse</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\mwse\funcgmst.cpp">
+      <Filter>mwse</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\mwse\funchud.cpp">
+      <Filter>mwse</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\mwse\funcinput.cpp">
+      <Filter>mwse</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\mwse\funcmwui.cpp">
+      <Filter>mwse</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\mwse\funcphysics.cpp">
+      <Filter>mwse</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\mwse\funcshader.cpp">
+      <Filter>mwse</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\mwse\funcweather.cpp">
+      <Filter>mwse</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\mwse\mgebridge.cpp">
+      <Filter>mwse</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\mwse\mwseinstruction.cpp">
+      <Filter>mwse</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\proxydx\dinput8.cpp">
+      <Filter>proxydx</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\proxydx\dxguid.cpp">
+      <Filter>proxydx</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\support\log.cpp">
+      <Filter>support</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\support\pngsave.cpp">
+      <Filter>support</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\support\timing.cpp">
+      <Filter>support</Filter>
+    </ClCompile>
+    <ClCompile Include="source\d3d8types.cpp">
+      <Filter>helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="source\interface_query.cpp">
+      <Filter>helpers</Filter>
+    </ClCompile>
     <ClCompile Include="source\d3d8to9_base.cpp" />
     <ClCompile Include="source\d3d8to9_device.cpp" />
     <ClCompile Include="source\d3d8to9_index_buffer.cpp" />
@@ -18,21 +159,149 @@
     <ClCompile Include="source\d3d8to9_texture.cpp" />
     <ClCompile Include="source\d3d8to9_vertex_buffer.cpp" />
     <ClCompile Include="source\d3d8to9_volume.cpp" />
-    <ClCompile Include="source\d3d8types.cpp">
-      <Filter>helpers</Filter>
-    </ClCompile>
-    <ClCompile Include="source\interface_query.cpp">
-      <Filter>helpers</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="res\resource.h">
       <Filter>resources</Filter>
     </ClInclude>
+    <ClInclude Include="MGE-XE\src\mge\api.h">
+      <Filter>mge</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mge\configinternal.h">
+      <Filter>mge</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mge\configuration.h">
+      <Filter>mge</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mge\distantland.h">
+      <Filter>mge</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mge\distantshader.h">
+      <Filter>mge</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mge\dlformat.h">
+      <Filter>mge</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mge\dlmath.h">
+      <Filter>mge</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mge\doublesurface.h">
+      <Filter>mge</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mge\ffeshader.h">
+      <Filter>mge</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mge\inidata.h">
+      <Filter>mge</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mge\memorypool.h">
+      <Filter>mge</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mge\MGEAPI.h">
+      <Filter>mge</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mge\mged3d8device.h">
+      <Filter>mge</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mge\mgedinput.h">
+      <Filter>mge</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mge\mgeversion.h">
+      <Filter>mge</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mge\mmefunctiondefs.h">
+      <Filter>mge</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mge\morrowindbsa.h">
+      <Filter>mge</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mge\mwbridge.h">
+      <Filter>mge</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mge\mwinitpatch.h">
+      <Filter>mge</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mge\postshaders.h">
+      <Filter>mge</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mge\quadtree.h">
+      <Filter>mge</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mge\specificrender.h">
+      <Filter>mge</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mge\statusoverlay.h">
+      <Filter>mge</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mge\userhud.h">
+      <Filter>mge</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mge\videobackground.h">
+      <Filter>mge</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mwse\funccamera.h">
+      <Filter>mwse</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mwse\funcentity.h">
+      <Filter>mwse</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mwse\funcgeneral.h">
+      <Filter>mwse</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mwse\funcgmst.h">
+      <Filter>mwse</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mwse\funchud.h">
+      <Filter>mwse</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mwse\funcinput.h">
+      <Filter>mwse</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mwse\funcmwui.h">
+      <Filter>mwse</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mwse\funcphysics.h">
+      <Filter>mwse</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mwse\funcshader.h">
+      <Filter>mwse</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mwse\funcweather.h">
+      <Filter>mwse</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mwse\mgebridge.h">
+      <Filter>mwse</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mwse\mwseinstruction.h">
+      <Filter>mwse</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mwse\tes3types.h">
+      <Filter>mwse</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\mwse\VMTYPES.h">
+      <Filter>mwse</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\proxydx\d3d9header.h">
+      <Filter>proxydx</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\proxydx\directin8.h">
+      <Filter>proxydx</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\support\log.h">
+      <Filter>support</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\support\pngsave.h">
+      <Filter>support</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\support\timing.h">
+      <Filter>support</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\support\winheader.h">
+      <Filter>support</Filter>
+    </ClInclude>
     <ClInclude Include="source\d3d8.hpp">
       <Filter>helpers</Filter>
     </ClInclude>
-    <ClInclude Include="source\d3d8to9.hpp" />
     <ClInclude Include="source\d3d8types.hpp">
       <Filter>helpers</Filter>
     </ClInclude>
@@ -42,10 +311,17 @@
     <ClInclude Include="source\interface_query.hpp">
       <Filter>helpers</Filter>
     </ClInclude>
+    <ClInclude Include="source\d3d8to9.hpp" />
+    <ClInclude Include="MGE-XE\src\proxydx\d3d8header.h">
+      <Filter>proxydx</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\d3d8.def">
       <Filter>resources</Filter>
+    </None>
+    <None Include="MGE-XE\src\proxydx\d3d8header.inl">
+      <Filter>proxydx</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug_RTX|Win32">
+      <Configuration>Debug_RTX</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
@@ -13,15 +17,20 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7EE21ADA-3B02-4CD6-A891-C2257A54B061}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Label="Configuration">
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>NotSet</CharacterSet>
     <PlatformToolset>v141</PlatformToolset>
     <PlatformToolset Condition="'$(VisualStudioVersion)'=='16.0'">v142</PlatformToolset>
-    <PlatformToolset Condition="'$(VisualStudioVersion)'=='17.0'">v143</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)'=='17.0'">v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_RTX|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
   </PropertyGroup>
@@ -36,7 +45,7 @@
   </ImportGroup>
   <PropertyGroup>
     <TargetName>d3d8</TargetName>
-    <OutDir>bin\$(Configuration)\</OutDir>
+    <OutDir>D:\modding tes3\Morrowind rtx\</OutDir>
     <IntDir>intermediate\$(Configuration)\</IntDir>
     <IncludePath>$(IncludePath);$(DXSDK_DIR)\Include</IncludePath>
     <LibraryPath>$(DXSDK_DIR)\Lib\x86;$(LibraryPath)</LibraryPath>
@@ -45,13 +54,37 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;D3D_DEBUG_INFO;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>
+      </SDLCheck>
+      <PreprocessorDefinitions>WIN32;NOMINMAX;_DEBUG;_WINDOWS;D3D_DEBUG_INFO;D3DX9;MGE_XE;D3D8TO9NOLOG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\GitHub\__rfuzzo\d3d8to9 - Copy\MGE-XE\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ModuleDefinitionFile>res\d3d8.def</ModuleDefinitionFile>
-      <AdditionalDependencies>d3d9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;d3d9.lib;d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_RTX|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>
+      </SDLCheck>
+      <PreprocessorDefinitions>WIN32;NOMINMAX;_DEBUG;_WINDOWS;D3D_DEBUG_INFO;D3DX9;MGE_XE;D3D8TO9NOLOG;MGE_RTX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\GitHub\__rfuzzo\d3d8to9 - Copy\MGE-XE\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ModuleDefinitionFile>res\d3d8.def</ModuleDefinitionFile>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;d3d9.lib;d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -77,6 +110,47 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="MGE-XE\src\mge\api.cpp" />
+    <ClCompile Include="MGE-XE\src\mge\configuration.cpp" />
+    <ClCompile Include="MGE-XE\src\mge\distantinit.cpp" />
+    <ClCompile Include="MGE-XE\src\mge\distantland.cpp" />
+    <ClCompile Include="MGE-XE\src\mge\dlmath.cpp" />
+    <ClCompile Include="MGE-XE\src\mge\ffeshader.cpp" />
+    <ClCompile Include="MGE-XE\src\mge\macrofunctions.cpp" />
+    <ClCompile Include="MGE-XE\src\mge\memorypool.cpp" />
+    <ClCompile Include="MGE-XE\src\mge\mged3d8device.cpp" />
+    <ClCompile Include="MGE-XE\src\mge\mgedinput.cpp" />
+    <ClCompile Include="MGE-XE\src\mge\morrowindbsa.cpp" />
+    <ClCompile Include="MGE-XE\src\mge\mwbridge.cpp" />
+    <ClCompile Include="MGE-XE\src\mge\mwinitpatch.cpp" />
+    <ClCompile Include="MGE-XE\src\mge\postshaders.cpp" />
+    <ClCompile Include="MGE-XE\src\mge\quadtree.cpp" />
+    <ClCompile Include="MGE-XE\src\mge\renderdepth.cpp" />
+    <ClCompile Include="MGE-XE\src\mge\renderexterior.cpp" />
+    <ClCompile Include="MGE-XE\src\mge\rendergrass.cpp" />
+    <ClCompile Include="MGE-XE\src\mge\rendershadow.cpp" />
+    <ClCompile Include="MGE-XE\src\mge\renderwater.cpp" />
+    <ClCompile Include="MGE-XE\src\mge\specificrender.cpp" />
+    <ClCompile Include="MGE-XE\src\mge\statusoverlay.cpp" />
+    <ClCompile Include="MGE-XE\src\mge\userhud.cpp" />
+    <ClCompile Include="MGE-XE\src\mge\videobackground.cpp" />
+    <ClCompile Include="MGE-XE\src\mwse\funccamera.cpp" />
+    <ClCompile Include="MGE-XE\src\mwse\funcentity.cpp" />
+    <ClCompile Include="MGE-XE\src\mwse\funcgeneral.cpp" />
+    <ClCompile Include="MGE-XE\src\mwse\funcgmst.cpp" />
+    <ClCompile Include="MGE-XE\src\mwse\funchud.cpp" />
+    <ClCompile Include="MGE-XE\src\mwse\funcinput.cpp" />
+    <ClCompile Include="MGE-XE\src\mwse\funcmwui.cpp" />
+    <ClCompile Include="MGE-XE\src\mwse\funcphysics.cpp" />
+    <ClCompile Include="MGE-XE\src\mwse\funcshader.cpp" />
+    <ClCompile Include="MGE-XE\src\mwse\funcweather.cpp" />
+    <ClCompile Include="MGE-XE\src\mwse\mgebridge.cpp" />
+    <ClCompile Include="MGE-XE\src\mwse\mwseinstruction.cpp" />
+    <ClCompile Include="MGE-XE\src\proxydx\dinput8.cpp" />
+    <ClCompile Include="MGE-XE\src\proxydx\dxguid.cpp" />
+    <ClCompile Include="MGE-XE\src\support\log.cpp" />
+    <ClCompile Include="MGE-XE\src\support\pngsave.cpp" />
+    <ClCompile Include="MGE-XE\src\support\timing.cpp" />
     <ClCompile Include="source\d3d8to9.cpp" />
     <ClCompile Include="source\d3d8to9_base.cpp" />
     <ClCompile Include="source\d3d8to9_device.cpp" />
@@ -90,6 +164,52 @@
     <ClCompile Include="source\interface_query.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="MGE-XE\src\mge\api.h" />
+    <ClInclude Include="MGE-XE\src\mge\configinternal.h" />
+    <ClInclude Include="MGE-XE\src\mge\configuration.h" />
+    <ClInclude Include="MGE-XE\src\mge\distantland.h" />
+    <ClInclude Include="MGE-XE\src\mge\distantshader.h" />
+    <ClInclude Include="MGE-XE\src\mge\dlformat.h" />
+    <ClInclude Include="MGE-XE\src\mge\dlmath.h" />
+    <ClInclude Include="MGE-XE\src\mge\doublesurface.h" />
+    <ClInclude Include="MGE-XE\src\mge\ffeshader.h" />
+    <ClInclude Include="MGE-XE\src\mge\inidata.h" />
+    <ClInclude Include="MGE-XE\src\mge\memorypool.h" />
+    <ClInclude Include="MGE-XE\src\mge\MGEAPI.h" />
+    <ClInclude Include="MGE-XE\src\mge\mged3d8device.h" />
+    <ClInclude Include="MGE-XE\src\mge\mgedinput.h" />
+    <ClInclude Include="MGE-XE\src\mge\mgeversion.h" />
+    <ClInclude Include="MGE-XE\src\mge\mmefunctiondefs.h" />
+    <ClInclude Include="MGE-XE\src\mge\morrowindbsa.h" />
+    <ClInclude Include="MGE-XE\src\mge\mwbridge.h" />
+    <ClInclude Include="MGE-XE\src\mge\mwinitpatch.h" />
+    <ClInclude Include="MGE-XE\src\mge\postshaders.h" />
+    <ClInclude Include="MGE-XE\src\mge\quadtree.h" />
+    <ClInclude Include="MGE-XE\src\mge\specificrender.h" />
+    <ClInclude Include="MGE-XE\src\mge\statusoverlay.h" />
+    <ClInclude Include="MGE-XE\src\mge\userhud.h" />
+    <ClInclude Include="MGE-XE\src\mge\videobackground.h" />
+    <ClInclude Include="MGE-XE\src\mwse\funccamera.h" />
+    <ClInclude Include="MGE-XE\src\mwse\funcentity.h" />
+    <ClInclude Include="MGE-XE\src\mwse\funcgeneral.h" />
+    <ClInclude Include="MGE-XE\src\mwse\funcgmst.h" />
+    <ClInclude Include="MGE-XE\src\mwse\funchud.h" />
+    <ClInclude Include="MGE-XE\src\mwse\funcinput.h" />
+    <ClInclude Include="MGE-XE\src\mwse\funcmwui.h" />
+    <ClInclude Include="MGE-XE\src\mwse\funcphysics.h" />
+    <ClInclude Include="MGE-XE\src\mwse\funcshader.h" />
+    <ClInclude Include="MGE-XE\src\mwse\funcweather.h" />
+    <ClInclude Include="MGE-XE\src\mwse\mgebridge.h" />
+    <ClInclude Include="MGE-XE\src\mwse\mwseinstruction.h" />
+    <ClInclude Include="MGE-XE\src\mwse\tes3types.h" />
+    <ClInclude Include="MGE-XE\src\mwse\VMTYPES.h" />
+    <ClInclude Include="MGE-XE\src\proxydx\d3d8header.h" />
+    <ClInclude Include="MGE-XE\src\proxydx\d3d9header.h" />
+    <ClInclude Include="MGE-XE\src\proxydx\directin8.h" />
+    <ClInclude Include="MGE-XE\src\support\log.h" />
+    <ClInclude Include="MGE-XE\src\support\pngsave.h" />
+    <ClInclude Include="MGE-XE\src\support\timing.h" />
+    <ClInclude Include="MGE-XE\src\support\winheader.h" />
     <ClInclude Include="res\resource.h" />
     <ClInclude Include="source\d3d8.hpp" />
     <ClInclude Include="source\d3d8to9.hpp" />
@@ -98,6 +218,7 @@
     <ClInclude Include="source\interface_query.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="MGE-XE\src\proxydx\d3d8header.inl" />
     <None Include="res\d3d8.def" />
   </ItemGroup>
   <ItemGroup>
