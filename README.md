@@ -1,3 +1,7 @@
+# MGE-XE Remix
+
+> This is an experimental port of [MGE-XE](https://github.com/Hrnchamd/MGE-XE) onto d3d8to9 to enable distant land with [rtx-remix](https://github.com/NVIDIAGameWorks/rtx-remix)
+
 d3d8to9
 =======
 
