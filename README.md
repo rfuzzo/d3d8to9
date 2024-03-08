@@ -2,6 +2,12 @@
 
 > This is an experimental port of [MGE-XE](https://github.com/Hrnchamd/MGE-XE) onto d3d8to9 to enable distant land with [rtx-remix](https://github.com/NVIDIAGameWorks/rtx-remix)
 
+## Usage
+- Compile in Release
+- Put the `d3d8.dll` next to `Morrowind.exe`
+- Run with RTX Remix
+
+
 d3d8to9
 =======
 
