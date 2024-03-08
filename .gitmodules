@@ -1,0 +1,3 @@
+[submodule "MGE-XE"]
+	path = MGE-XE
+	url = https://github.com/rfuzzo/MGE-XE
