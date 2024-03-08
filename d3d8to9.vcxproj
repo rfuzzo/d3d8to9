@@ -45,7 +45,7 @@
   </ImportGroup>
   <PropertyGroup>
     <TargetName>d3d8</TargetName>
-    <OutDir>D:\modding tes3\Morrowind rtx\</OutDir>
+    <OutDir>bin\$(Configuration)\</OutDir>
     <IntDir>intermediate\$(Configuration)\</IntDir>
     <IncludePath>$(IncludePath);$(DXSDK_DIR)\Include</IncludePath>
     <LibraryPath>$(DXSDK_DIR)\Lib\x86;$(LibraryPath)</LibraryPath>
@@ -58,8 +58,7 @@
       </SDLCheck>
       <PreprocessorDefinitions>
         WIN32;NOMINMAX;_DEBUG;_WINDOWS;D3D_DEBUG_INFO;D3DX9;MGE_XE;D3D8TO9NOLOG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\GitHub\__rfuzzo\d3d8to9 -
-        Copy\MGE-XE\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>MGE-XE\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
