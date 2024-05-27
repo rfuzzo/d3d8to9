@@ -935,6 +935,8 @@ HRESULT STDMETHODCALLTYPE Direct3DDevice8::SetTextureStageState(DWORD Stage, D3D
 	case D3DTSS_BORDERCOLOR:
 		return ProxyInterface->SetSamplerState(Stage, D3DSAMP_BORDERCOLOR, Value);
 	case D3DTSS_MAGFILTER:
+		if (Value == D3DTEXF_FLATCUBIC || Value == D3DTEXF_GAUSSIANCUBIC)
+			Value = D3DTEXF_LINEAR;
 		return ProxyInterface->SetSamplerState(Stage, D3DSAMP_MAGFILTER, Value);
 	case D3DTSS_MINFILTER:
 		return ProxyInterface->SetSamplerState(Stage, D3DSAMP_MINFILTER, Value);
@@ -2010,20 +2012,29 @@ HRESULT STDMETHODCALLTYPE Direct3DDevice8::CreatePixelShader(const DWORD *pFunct
 		NewSourceCode.insert(PhasePosition, "    phase\n");
 
 		// If no errors were encountered then check if code assembles
-		if (!ConvertError)
+		if (!ConvertError && D3DXAssembleShader != nullptr)
 		{
 			// Test if ps_1_4 assembles
 			if (SUCCEEDED(D3DXAssembleShader(NewSourceCode.data(), static_cast<UINT>(NewSourceCode.size()), nullptr, nullptr, 0, &Assembly, &ErrorBuffer)))
 			{
 				SourceCode = NewSourceCode;
+				Assembly->Release();
+				Assembly = nullptr;
 			}
 			else
 			{
 #ifndef D3D8TO9NOLOG
 				LOG << "> Failed to convert shader to ps_1_4" << std::endl;
 				LOG << "> Dumping translated shader assembly:" << std::endl << std::endl << NewSourceCode << std::endl;
-				LOG << "> Failed to reassemble shader:" << std::endl << std::endl << static_cast<const char *>(ErrorBuffer->GetBufferPointer()) << std::endl;
 #endif
+				if (ErrorBuffer != nullptr)
+				{
+#ifndef D3D8TO9NOLOG
+					LOG << "> Failed to reassemble shader:" << std::endl << std::endl << static_cast<const char*>(ErrorBuffer->GetBufferPointer()) << std::endl;
+#endif
+					ErrorBuffer->Release();
+					ErrorBuffer = nullptr;
+				}
 			}
 		}
 	}
@@ -2078,6 +2089,8 @@ HRESULT STDMETHODCALLTYPE Direct3DDevice8::CreatePixelShader(const DWORD *pFunct
 	}
 
 	hr = ProxyInterface->CreatePixelShader(static_cast<const DWORD *>(Assembly->GetBufferPointer()), reinterpret_cast<IDirect3DPixelShader9 **>(pHandle));
+
+	Assembly->Release();
 
 	if (FAILED(hr))
 	{
