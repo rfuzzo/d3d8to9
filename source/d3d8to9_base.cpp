@@ -278,7 +278,7 @@ HRESULT STDMETHODCALLTYPE Direct3D8::CreateDevice(UINT Adapter, D3DDEVTYPE Devic
 		DeviceInterface->SetSamplerState(i, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
 		DeviceInterface->SetSamplerState(i, D3DSAMP_MAXANISOTROPY, Configuration.AnisoLevel);
 	}
-#ifdef MGE_RTX
+#ifndef MGE_FOG
 	// Set variables dependent on configuration
 	DWORD FogPixelMode, FogVertexMode, RangedFog;
 	if (Configuration.FogMode == 2) {
