@@ -267,6 +267,7 @@ HRESULT STDMETHODCALLTYPE Direct3D8::CreateDevice(UINT Adapter, D3DDEVTYPE Devic
 		return hr;
 
 	*ppReturnedDeviceInterface = factoryProxyDevice(DeviceInterface, (pp.Flags & D3DPRESENTFLAG_DISCARD_DEPTHSTENCIL) != 0);
+	//*ppReturnedDeviceInterface = new Direct3DDevice8(this, DeviceInterface, BehaviorFlags, (PresentParams.Flags & D3DPRESENTFLAG_DISCARD_DEPTHSTENCIL) != 0);
 
 ///////////////////////////////////////
 
@@ -304,7 +305,7 @@ HRESULT STDMETHODCALLTYPE Direct3D8::CreateDevice(UINT Adapter, D3DDEVTYPE Devic
 	DeviceInterface->SetRenderState(D3DRS_MULTISAMPLEANTIALIAS, (Configuration.AALevel > 0));
 
 ///////////////////////////////////////
-
+	
 	// Set default vertex declaration
 	DeviceInterface->SetFVF(D3DFVF_XYZ);
 
