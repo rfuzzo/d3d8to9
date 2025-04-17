@@ -172,6 +172,11 @@ HRESULT STDMETHODCALLTYPE Direct3D8::CreateDevice(UINT Adapter, D3DDEVTYPE Devic
 
 	*ppReturnedDeviceInterface = nullptr;
 
+	// Convert presentation parameters to DX9
+	D3DPRESENT_PARAMETERS pp;
+	ConvertPresentParameters(*pPresentationParameters, pp);
+
+#ifdef MGE_XE
 	// Window positioning
 	if (pPresentationParameters->Windowed)
 	{
@@ -205,10 +210,6 @@ HRESULT STDMETHODCALLTYPE Direct3D8::CreateDevice(UINT Adapter, D3DDEVTYPE Devic
 		}
 	}
 
-	// Convert presentation parameters to DX9
-	D3DPRESENT_PARAMETERS pp;
-
-#ifdef MGE_XE
 	// MSAA parameters
 	D3DMULTISAMPLE_TYPE msaaSamples = (D3DMULTISAMPLE_TYPE)Configuration.AALevel;
 	DWORD msaaQuality = 0;
@@ -240,27 +241,27 @@ HRESULT STDMETHODCALLTYPE Direct3D8::CreateDevice(UINT Adapter, D3DDEVTYPE Devic
 	pp.FullScreen_RefreshRateInHz = pPresentationParameters->FullScreen_RefreshRateInHz;
 	pp.PresentationInterval = pPresentationParameters->FullScreen_PresentationInterval;
 
-#else
+#endif // MGE_XE
 
 #ifndef D3D8TO9NOLOG
 	LOG << "Redirecting '" << "IDirect3D8::CreateDevice" << "(" << this << ", " << Adapter << ", " << DeviceType << ", " << hFocusWindow << ", " << BehaviorFlags << ", " << pPresentationParameters << ", " << ppReturnedDeviceInterface << ")' ..." << std::endl;
 #endif
 
-	ConvertPresentParameters(*pPresentationParameters, pp);
-
-#endif // MGE_XE
-
 	// Create device in the same manner as the proxy
 	IDirect3DDevice9 *DeviceInterface = nullptr;
+
 	const HRESULT hr = ProxyInterface->CreateDevice(Adapter, DeviceType, hFocusWindow, BehaviorFlags, &pp, &DeviceInterface);
 	if (FAILED(hr))
 		return hr;
 
+#ifdef MGE_XE
 	*ppReturnedDeviceInterface = factoryProxyDevice(DeviceInterface, (pp.Flags & D3DPRESENTFLAG_DISCARD_DEPTHSTENCIL) != 0);
-	//*ppReturnedDeviceInterface = new Direct3DDevice8(this, DeviceInterface, BehaviorFlags, (PresentParams.Flags & D3DPRESENTFLAG_DISCARD_DEPTHSTENCIL) != 0);
+#else
+	*ppReturnedDeviceInterface = new Direct3DDevice8(this, DeviceInterface, BehaviorFlags, (PresentParams.Flags & D3DPRESENTFLAG_DISCARD_DEPTHSTENCIL) != 0);
+#endif // MGE_XE
 
 	///////////////////////////////////////
-
+#ifdef MGE_XE
 	// Set up default render states
 	Configuration.ScaleFilter = (Configuration.AnisoLevel > 0) ? D3DTEXF_ANISOTROPIC : D3DTEXF_LINEAR;
 
@@ -270,6 +271,7 @@ HRESULT STDMETHODCALLTYPE Direct3D8::CreateDevice(UINT Adapter, D3DDEVTYPE Devic
 		DeviceInterface->SetSamplerState(i, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
 		DeviceInterface->SetSamplerState(i, D3DSAMP_MAXANISOTROPY, Configuration.AnisoLevel);
 	}
+
 #ifndef MGE_FOG
 	// Set variables dependent on configuration
 	DWORD FogPixelMode, FogVertexMode, RangedFog;
@@ -297,7 +299,7 @@ HRESULT STDMETHODCALLTYPE Direct3D8::CreateDevice(UINT Adapter, D3DDEVTYPE Devic
 	DeviceInterface->SetRenderState(D3DRS_RANGEFOGENABLE, RangedFog);
 #endif // MGE_FOG
 	DeviceInterface->SetRenderState(D3DRS_MULTISAMPLEANTIALIAS, (Configuration.AALevel > 0));
-
+#endif // MGE_XE
 	///////////////////////////////////////
 
 	// Set default vertex declaration
