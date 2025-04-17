@@ -170,24 +170,6 @@ HRESULT STDMETHODCALLTYPE Direct3DDevice8::CreateAdditionalSwapChain(D3DPRESENT_
 	D3DPRESENT_PARAMETERS PresentParams;
 	ConvertPresentParameters(*pPresentationParameters, PresentParams);
 
-	// Get multisample quality level
-	if (PresentParams.MultiSampleType != D3DMULTISAMPLE_NONE)
-	{
-		DWORD QualityLevels = 0;
-		D3DDEVICE_CREATION_PARAMETERS CreationParams;
-		ProxyInterface->GetCreationParameters(&CreationParams);
-
-		if (D3D->GetProxyInterface()->CheckDeviceMultiSampleType(CreationParams.AdapterOrdinal,
-			CreationParams.DeviceType, PresentParams.BackBufferFormat, PresentParams.Windowed,
-			PresentParams.MultiSampleType, &QualityLevels) == S_OK &&
-			D3D->GetProxyInterface()->CheckDeviceMultiSampleType(CreationParams.AdapterOrdinal,
-				CreationParams.DeviceType, PresentParams.AutoDepthStencilFormat, PresentParams.Windowed,
-				PresentParams.MultiSampleType, &QualityLevels) == S_OK)
-		{
-			PresentParams.MultiSampleQuality = (QualityLevels != 0) ? QualityLevels - 1 : 0;
-		}
-	}
-
 	IDirect3DSwapChain9 *SwapChainInterface = nullptr;
 
 	const HRESULT hr = ProxyInterface->CreateAdditionalSwapChain(&PresentParams, &SwapChainInterface);
@@ -211,24 +193,6 @@ HRESULT STDMETHODCALLTYPE Direct3DDevice8::Reset(D3DPRESENT_PARAMETERS8 *pPresen
 
 	D3DPRESENT_PARAMETERS PresentParams;
 	ConvertPresentParameters(*pPresentationParameters, PresentParams);
-
-	// Get multisample quality level
-	if (PresentParams.MultiSampleType != D3DMULTISAMPLE_NONE)
-	{
-		DWORD QualityLevels = 0;
-		D3DDEVICE_CREATION_PARAMETERS CreationParams;
-		ProxyInterface->GetCreationParameters(&CreationParams);
-
-		if (D3D->GetProxyInterface()->CheckDeviceMultiSampleType(CreationParams.AdapterOrdinal,
-			CreationParams.DeviceType, PresentParams.BackBufferFormat, PresentParams.Windowed,
-			PresentParams.MultiSampleType, &QualityLevels) == S_OK &&
-			D3D->GetProxyInterface()->CheckDeviceMultiSampleType(CreationParams.AdapterOrdinal,
-				CreationParams.DeviceType, PresentParams.AutoDepthStencilFormat, PresentParams.Windowed,
-				PresentParams.MultiSampleType, &QualityLevels) == S_OK)
-		{
-			PresentParams.MultiSampleQuality = (QualityLevels != 0) ? QualityLevels - 1 : 0;
-		}
-	}
 
 	HRESULT hr = ProxyInterface->Reset(&PresentParams);
 
@@ -396,21 +360,9 @@ HRESULT STDMETHODCALLTYPE Direct3DDevice8::CreateRenderTarget(UINT Width, UINT H
 
 	*ppSurface = nullptr;
 
-	DWORD QualityLevels = 0;
-
-	// Get multisample quality level
-	if (MultiSample != D3DMULTISAMPLE_NONE)
-	{
-		D3DDEVICE_CREATION_PARAMETERS CreationParams;
-		ProxyInterface->GetCreationParameters(&CreationParams);
-
-		D3D->GetProxyInterface()->CheckDeviceMultiSampleType(CreationParams.AdapterOrdinal, CreationParams.DeviceType, Format, FALSE, MultiSample, &QualityLevels);
-		QualityLevels = (QualityLevels != 0) ? QualityLevels - 1 : 0;
-	}
-
 	IDirect3DSurface9 *SurfaceInterface = nullptr;
 
-	const HRESULT hr = ProxyInterface->CreateRenderTarget(Width, Height, Format, MultiSample, QualityLevels, Lockable, &SurfaceInterface, nullptr);
+	const HRESULT hr = ProxyInterface->CreateRenderTarget(Width, Height, Format, MultiSample, 0, Lockable, &SurfaceInterface, nullptr);
 	if (FAILED(hr))
 		return hr;
 
@@ -428,21 +380,9 @@ HRESULT STDMETHODCALLTYPE Direct3DDevice8::CreateDepthStencilSurface(UINT Width,
 
 	*ppSurface = nullptr;
 
-	DWORD QualityLevels = 0;
-
-	// Get multisample quality level
-	if (MultiSample != D3DMULTISAMPLE_NONE)
-	{
-		D3DDEVICE_CREATION_PARAMETERS CreationParams;
-		ProxyInterface->GetCreationParameters(&CreationParams);
-
-		D3D->GetProxyInterface()->CheckDeviceMultiSampleType(CreationParams.AdapterOrdinal, CreationParams.DeviceType, Format, FALSE, MultiSample, &QualityLevels);
-		QualityLevels = (QualityLevels != 0) ? QualityLevels - 1 : 0;
-	}
-
 	IDirect3DSurface9 *SurfaceInterface = nullptr;
 
-	const HRESULT hr = ProxyInterface->CreateDepthStencilSurface(Width, Height, Format, MultiSample, QualityLevels, ZBufferDiscarding, &SurfaceInterface, nullptr);
+	const HRESULT hr = ProxyInterface->CreateDepthStencilSurface(Width, Height, Format, MultiSample, 0, ZBufferDiscarding, &SurfaceInterface, nullptr);
 	if (FAILED(hr))
 		return hr;
 
@@ -1655,7 +1595,8 @@ HRESULT STDMETHODCALLTYPE Direct3DDevice8::SetVertexShader(DWORD Handle)
 		hr = ProxyInterface->SetVertexShader(ShaderInfo->Shader);
 		ProxyInterface->SetVertexDeclaration(ShaderInfo->Declaration);
 
-		CurrentVertexShaderHandle = Handle;
+		if (SUCCEEDED(hr))
+			CurrentVertexShaderHandle = Handle;
 	}
 
 	return hr;
@@ -1750,11 +1691,11 @@ HRESULT STDMETHODCALLTYPE Direct3DDevice8::GetVertexShaderFunction(DWORD Handle,
 }
 HRESULT STDMETHODCALLTYPE Direct3DDevice8::SetStreamSource(UINT StreamNumber, IDirect3DVertexBuffer8 *pStreamData, UINT Stride)
 {
-	if (pStreamData == nullptr)
-		return D3DERR_INVALIDCALL;
+	IDirect3DVertexBuffer9 *pStreamDataImpl = nullptr;
+	if (pStreamData != nullptr)
+		pStreamDataImpl = static_cast<Direct3DVertexBuffer8 *>(pStreamData)->GetProxyInterface();
 
-	auto pStreamDataImpl = static_cast<Direct3DVertexBuffer8 *>(pStreamData);
-	return ProxyInterface->SetStreamSource(StreamNumber, pStreamDataImpl->GetProxyInterface(), 0, Stride);
+	return ProxyInterface->SetStreamSource(StreamNumber, pStreamDataImpl, 0, Stride);
 }
 HRESULT STDMETHODCALLTYPE Direct3DDevice8::GetStreamSource(UINT StreamNumber, IDirect3DVertexBuffer8 **ppStreamData, UINT *pStride)
 {
@@ -1777,13 +1718,20 @@ HRESULT STDMETHODCALLTYPE Direct3DDevice8::GetStreamSource(UINT StreamNumber, ID
 }
 HRESULT STDMETHODCALLTYPE Direct3DDevice8::SetIndices(IDirect3DIndexBuffer8 *pIndexData, UINT BaseVertexIndex)
 {
-	if (pIndexData == nullptr || BaseVertexIndex > 0x7FFFFFFF)
+	if (BaseVertexIndex > 0x7FFFFFFF)
 		return D3DERR_INVALIDCALL;
+
+	IDirect3DIndexBuffer9 *pIndexDataImpl = nullptr;
+	if (pIndexData != nullptr)
+		pIndexDataImpl = static_cast<Direct3DIndexBuffer8 *>(pIndexData)->GetProxyInterface();
+
+	const HRESULT hr = ProxyInterface->SetIndices(pIndexDataImpl);
+	if (FAILED(hr))
+		return hr;
 
 	CurrentBaseVertexIndex = static_cast<INT>(BaseVertexIndex);
 
-	auto pIndexDataImpl = static_cast<Direct3DIndexBuffer8 *>(pIndexData);
-	return ProxyInterface->SetIndices(pIndexDataImpl->GetProxyInterface());
+	return D3D_OK;
 }
 HRESULT STDMETHODCALLTYPE Direct3DDevice8::GetIndices(IDirect3DIndexBuffer8 **ppIndexData, UINT *pBaseVertexIndex)
 {
@@ -2257,9 +2205,13 @@ HRESULT STDMETHODCALLTYPE Direct3DDevice8::CreatePixelShader(const DWORD *pFunct
 }
 HRESULT STDMETHODCALLTYPE Direct3DDevice8::SetPixelShader(DWORD Handle)
 {
+	const HRESULT hr = ProxyInterface->SetPixelShader(reinterpret_cast<IDirect3DPixelShader9 *>(Handle));
+	if (FAILED(hr))
+		return hr;
+
 	CurrentPixelShaderHandle = Handle;
 
-	return ProxyInterface->SetPixelShader(reinterpret_cast<IDirect3DPixelShader9 *>(Handle));
+	return D3D_OK;
 }
 HRESULT STDMETHODCALLTYPE Direct3DDevice8::GetPixelShader(DWORD *pHandle)
 {
