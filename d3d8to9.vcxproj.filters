@@ -19,6 +19,9 @@
     <Filter Include="support">
       <UniqueIdentifier>{501e17eb-3e1f-464c-8cf9-8f2c811673df}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ipc">
+      <UniqueIdentifier>{89ce412f-c32f-4a1a-9e90-12d68f3e7fce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\d3d8to9.cpp" />
@@ -159,6 +162,30 @@
     <ClCompile Include="source\d3d8to9_texture.cpp" />
     <ClCompile Include="source\d3d8to9_vertex_buffer.cpp" />
     <ClCompile Include="source\d3d8to9_volume.cpp" />
+    <ClCompile Include="MGE-XE\src\ipc\bridge.cpp">
+      <Filter>ipc</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\ipc\client.cpp">
+      <Filter>ipc</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\ipc\dlshare.cpp">
+      <Filter>ipc</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\ipc\server.cpp">
+      <Filter>ipc</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\ipc\vec.cpp">
+      <Filter>ipc</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\ipc\vecbase.cpp">
+      <Filter>ipc</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\ipc\vecwrap.cpp">
+      <Filter>ipc</Filter>
+    </ClCompile>
+    <ClCompile Include="MGE-XE\src\ipc\view.cpp">
+      <Filter>ipc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="res\resource.h">
@@ -314,6 +341,30 @@
     <ClInclude Include="source\d3d8to9.hpp" />
     <ClInclude Include="MGE-XE\src\proxydx\d3d8header.h">
       <Filter>proxydx</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\ipc\bridge.h">
+      <Filter>ipc</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\ipc\client.h">
+      <Filter>ipc</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\ipc\dlshare.h">
+      <Filter>ipc</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\ipc\server.h">
+      <Filter>ipc</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\ipc\vec.h">
+      <Filter>ipc</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\ipc\vecbase.h">
+      <Filter>ipc</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\ipc\vecwrap.h">
+      <Filter>ipc</Filter>
+    </ClInclude>
+    <ClInclude Include="MGE-XE\src\ipc\view.h">
+      <Filter>ipc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

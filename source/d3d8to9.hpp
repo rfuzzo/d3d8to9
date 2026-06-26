@@ -39,7 +39,7 @@ public:
 	virtual HMONITOR STDMETHODCALLTYPE GetAdapterMonitor(UINT Adapter) override;
 	virtual HRESULT STDMETHODCALLTYPE CreateDevice(UINT Adapter, D3DDEVTYPE DeviceType, HWND hFocusWindow, DWORD BehaviorFlags, D3DPRESENT_PARAMETERS8 *pPresentationParameters, IDirect3DDevice8 **ppReturnedDeviceInterface) override;
 
-	IDirect3DDevice8* factoryProxyDevice(IDirect3DDevice9* d, bool EnableZBufferDiscarding);
+	IDirect3DDevice8* factoryProxyDevice(IDirect3DDevice9* d, DWORD BehaviorFlags, D3DFORMAT ZBufferFormat, bool EnableZBufferDiscarding);
 
 private:
 	IDirect3D9 *const ProxyInterface;

@@ -255,7 +255,7 @@ HRESULT STDMETHODCALLTYPE Direct3D8::CreateDevice(UINT Adapter, D3DDEVTYPE Devic
 		return hr;
 
 #ifdef MGE_XE
-	*ppReturnedDeviceInterface = factoryProxyDevice(DeviceInterface, (pp.Flags & D3DPRESENTFLAG_DISCARD_DEPTHSTENCIL) != 0);
+	*ppReturnedDeviceInterface = factoryProxyDevice(DeviceInterface, BehaviorFlags, D3DFMT_UNKNOWN, (pp.Flags & D3DPRESENTFLAG_DISCARD_DEPTHSTENCIL) != 0);
 #else
 	*ppReturnedDeviceInterface = new Direct3DDevice8(this, DeviceInterface, BehaviorFlags, PresentParams.EnableAutoDepthStencil ? PresentParams.AutoDepthStencilFormat : D3DFMT_UNKNOWN, (PresentParams.Flags & D3DPRESENTFLAG_DISCARD_DEPTHSTENCIL) != 0);
 #endif // MGE_XE
@@ -312,11 +312,11 @@ HRESULT STDMETHODCALLTYPE Direct3D8::CreateDevice(UINT Adapter, D3DDEVTYPE Devic
 #include "mge/mged3d8device.h"
 #endif // MGE_XE
 
-IDirect3DDevice8 *Direct3D8::factoryProxyDevice(IDirect3DDevice9 *d, bool EnableZBufferDiscarding)
+IDirect3DDevice8 *Direct3D8::factoryProxyDevice(IDirect3DDevice9 *d, DWORD BehaviorFlags, D3DFORMAT ZBufferFormat, bool EnableZBufferDiscarding)
 {
 #ifdef MGE_XE
-	return new MGEProxyDevice(d, this, EnableZBufferDiscarding);
+	return new MGEProxyDevice(d, this, BehaviorFlags, ZBufferFormat, EnableZBufferDiscarding);
 #else
-	return new Direct3DDevice8(this, d, EnableZBufferDiscarding);
+	return new Direct3DDevice8(this, d, BehaviorFlags, ZBufferFormat, EnableZBufferDiscarding);
 #endif // MGE_XE
 }

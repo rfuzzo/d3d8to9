@@ -26,7 +26,7 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Label="Configuration">
     <CharacterSet>NotSet</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <PlatformToolset Condition="'$(VisualStudioVersion)'=='16.0'">v142</PlatformToolset>
     <PlatformToolset Condition="'$(VisualStudioVersion)'=='17.0'">v142</PlatformToolset>
   </PropertyGroup>
@@ -160,6 +160,14 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="MGE-XE\src\ipc\bridge.cpp" />
+    <ClCompile Include="MGE-XE\src\ipc\client.cpp" />
+    <ClCompile Include="MGE-XE\src\ipc\dlshare.cpp" />
+    <ClCompile Include="MGE-XE\src\ipc\server.cpp" />
+    <ClCompile Include="MGE-XE\src\ipc\vec.cpp" />
+    <ClCompile Include="MGE-XE\src\ipc\vecbase.cpp" />
+    <ClCompile Include="MGE-XE\src\ipc\vecwrap.cpp" />
+    <ClCompile Include="MGE-XE\src\ipc\view.cpp" />
     <ClCompile Include="MGE-XE\src\mge\api.cpp" />
     <ClCompile Include="MGE-XE\src\mge\configuration.cpp" />
     <ClCompile Include="MGE-XE\src\mge\distantinit.cpp" />
@@ -214,6 +222,14 @@
     <ClCompile Include="source\interface_query.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="MGE-XE\src\ipc\bridge.h" />
+    <ClInclude Include="MGE-XE\src\ipc\client.h" />
+    <ClInclude Include="MGE-XE\src\ipc\dlshare.h" />
+    <ClInclude Include="MGE-XE\src\ipc\server.h" />
+    <ClInclude Include="MGE-XE\src\ipc\vec.h" />
+    <ClInclude Include="MGE-XE\src\ipc\vecbase.h" />
+    <ClInclude Include="MGE-XE\src\ipc\vecwrap.h" />
+    <ClInclude Include="MGE-XE\src\ipc\view.h" />
     <ClInclude Include="MGE-XE\src\mge\api.h" />
     <ClInclude Include="MGE-XE\src\mge\configinternal.h" />
     <ClInclude Include="MGE-XE\src\mge\configuration.h" />
