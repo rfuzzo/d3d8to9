@@ -7,22 +7,46 @@
 #include <assert.h>
 #include <algorithm>
 
-bool SupportsPalettes()
+DWORD GetDepthStencilBitCount(D3DFORMAT Format)
 {
-	HDC hDC = GetDC(nullptr);
-	bool hasPalette = (GetDeviceCaps(hDC, RASTERCAPS) & RC_PALETTE) != 0;
-	ReleaseDC(nullptr, hDC);
-	return hasPalette;
+	switch (Format)
+	{
+	default:
+		return 0;
+	case D3DFMT_D15S1:
+		return 15;
+	case D3DFMT_D16_LOCKABLE:
+	case D3DFMT_D16:
+		return 16;
+	case D3DFMT_D24X4S4:
+	case D3DFMT_D24S8:
+	case D3DFMT_D24X8:
+		return 24;
+	case D3DFMT_D32:
+		return 32;
+	}
 }
 
-bool IsDepthStencil(D3DFORMAT &Format) {
-	return Format == D3DFMT_D16_LOCKABLE
-		|| Format == D3DFMT_D16
-		|| Format == D3DFMT_D32
-		|| Format == D3DFMT_D15S1
-		|| Format == D3DFMT_D24X4S4
-		|| Format == D3DFMT_D24S8
-		|| Format == D3DFMT_D24X8;
+DWORD CalcDepthBias(DWORD ZBias, DWORD DepthBitCount)
+{
+	float DepthEpsilon;
+	switch (DepthBitCount)
+	{
+	case 32:
+	case 24:
+		// Bit shifting by 24 is too small for float precision. A shift of 20 seems to work best.
+		DepthEpsilon = -1.0f / ((1 << 20) - 1);
+		break;
+	default:
+	case 16:
+		DepthEpsilon = -1.0f / ((1 << 16) - 1);
+		break;
+	case 15:
+		DepthEpsilon = -1.0f / ((1 << 15) - 1);
+		break;
+	}
+	float DepthBias = std::min(ZBias, 16UL) * DepthEpsilon;
+	return *reinterpret_cast<DWORD*>(&DepthBias);
 }
 
 static UINT CalcTextureSize(UINT Width, UINT Height, UINT Depth, D3DFORMAT Format)

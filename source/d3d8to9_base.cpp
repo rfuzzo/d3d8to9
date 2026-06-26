@@ -18,8 +18,8 @@ Direct3D8::Direct3D8(IDirect3D9 *ProxyInterface) : ProxyInterface(ProxyInterface
 	D3DDISPLAYMODE pMode;
 
 	CurrentAdapterCount = ProxyInterface->GetAdapterCount();
-	if (CurrentAdapterCount > MaxAdapters)
-		CurrentAdapterCount = MaxAdapters;
+	if (CurrentAdapterCount > MAX_ADAPTERS)
+		CurrentAdapterCount = MAX_ADAPTERS;
 
 	for (UINT Adapter = 0; Adapter < CurrentAdapterCount; Adapter++)
 	{
@@ -257,7 +257,7 @@ HRESULT STDMETHODCALLTYPE Direct3D8::CreateDevice(UINT Adapter, D3DDEVTYPE Devic
 #ifdef MGE_XE
 	*ppReturnedDeviceInterface = factoryProxyDevice(DeviceInterface, (pp.Flags & D3DPRESENTFLAG_DISCARD_DEPTHSTENCIL) != 0);
 #else
-	*ppReturnedDeviceInterface = new Direct3DDevice8(this, DeviceInterface, BehaviorFlags, (PresentParams.Flags & D3DPRESENTFLAG_DISCARD_DEPTHSTENCIL) != 0);
+	*ppReturnedDeviceInterface = new Direct3DDevice8(this, DeviceInterface, BehaviorFlags, PresentParams.EnableAutoDepthStencil ? PresentParams.AutoDepthStencilFormat : D3DFMT_UNKNOWN, (PresentParams.Flags & D3DPRESENTFLAG_DISCARD_DEPTHSTENCIL) != 0);
 #endif // MGE_XE
 
 	///////////////////////////////////////
