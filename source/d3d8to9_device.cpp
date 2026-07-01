@@ -140,6 +140,13 @@ HRESULT STDMETHODCALLTYPE Direct3DDevice8::GetDeviceCaps(D3DCAPS8 *pCaps)
 
 	ConvertCaps(DeviceCaps, *pCaps);
 
+#ifdef MGE_XE
+	// Force shaders off so Morrowind uses fixed-function paths only,
+	// matching MGEProxyD3D; MGE's water override and scene detection rely on it
+	pCaps->VertexShaderVersion = 0;
+	pCaps->PixelShaderVersion = 0;
+#endif // MGE_XE
+
 	return D3D_OK;
 }
 HRESULT STDMETHODCALLTYPE Direct3DDevice8::GetDisplayMode(D3DDISPLAYMODE *pMode)

@@ -159,6 +159,13 @@ HRESULT STDMETHODCALLTYPE Direct3D8::GetDeviceCaps(UINT Adapter, D3DDEVTYPE Devi
 
 	ConvertCaps(DeviceCaps, *pCaps);
 
+#ifdef MGE_XE
+	// Force shaders off so Morrowind uses fixed-function paths only,
+	// matching MGEProxyD3D; MGE's water override and scene detection rely on it
+	pCaps->VertexShaderVersion = 0;
+	pCaps->PixelShaderVersion = 0;
+#endif // MGE_XE
+
 	return D3D_OK;
 }
 HMONITOR STDMETHODCALLTYPE Direct3D8::GetAdapterMonitor(UINT Adapter)
@@ -255,7 +262,7 @@ HRESULT STDMETHODCALLTYPE Direct3D8::CreateDevice(UINT Adapter, D3DDEVTYPE Devic
 		return hr;
 
 #ifdef MGE_XE
-	*ppReturnedDeviceInterface = factoryProxyDevice(DeviceInterface, BehaviorFlags, D3DFMT_UNKNOWN, (pp.Flags & D3DPRESENTFLAG_DISCARD_DEPTHSTENCIL) != 0);
+	*ppReturnedDeviceInterface = factoryProxyDevice(DeviceInterface, BehaviorFlags, pp.EnableAutoDepthStencil ? pp.AutoDepthStencilFormat : D3DFMT_UNKNOWN, (pp.Flags & D3DPRESENTFLAG_DISCARD_DEPTHSTENCIL) != 0);
 #else
 	*ppReturnedDeviceInterface = new Direct3DDevice8(this, DeviceInterface, BehaviorFlags, PresentParams.EnableAutoDepthStencil ? PresentParams.AutoDepthStencilFormat : D3DFMT_UNKNOWN, (PresentParams.Flags & D3DPRESENTFLAG_DISCARD_DEPTHSTENCIL) != 0);
 #endif // MGE_XE
