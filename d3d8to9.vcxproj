@@ -140,7 +140,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NOMINMAX;_WINDOWS;NDEBUG;D3D8TO9NOLOG;D3DX9;MGE_XE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NOMINMAX;_WINDOWS;NDEBUG;D3D8TO9NOLOG;D3DX9;MGE_XE;MGE_RTX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <AdditionalIncludeDirectories>MGE-XE\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
